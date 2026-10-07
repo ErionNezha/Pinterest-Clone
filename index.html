@@ -1,0 +1,282 @@
+<!-- Created by Erion Nezha — © 2026 All rights reserved -->
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PinBoard — Erion Nezha</title>
+<meta name="description" content="Zbulo dhe ruaj pin-e frymëzuese në një masonry grid elegant — demo lokale.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<style id="appcss">
+/* ============ ERION NEZHA · ULTRA-PREMIUM THEME (shared) ============ */
+:root{
+  --bg0:#070b16; --bg1:#0b1124; --gold:#D4AF37; --gold2:#f3dd8f;
+  --ink:#eef1f7; --mut:#9aa3b8; --glass:rgba(255,255,255,.055);
+  --line:rgba(212,175,55,.22); --r:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  background:var(--bg0); color:var(--ink); min-height:100vh; overflow-x:hidden;
+}
+.bg-orbs{position:fixed;inset:0;z-index:-1;overflow:hidden}
+.bg-orbs span{position:absolute;border-radius:50%;filter:blur(90px);opacity:.28;animation:drift 14s ease-in-out infinite alternate}
+.bg-orbs span:nth-child(1){width:520px;height:520px;left:-140px;top:-120px;background:radial-gradient(circle,#D4AF37,transparent 65%)}
+.bg-orbs span:nth-child(2){width:620px;height:620px;right:-180px;top:30%;background:radial-gradient(circle,#2b3f8f,transparent 65%);animation-delay:-5s}
+.bg-orbs span:nth-child(3){width:460px;height:460px;left:20%;bottom:-160px;background:radial-gradient(circle,#6b4fa1,transparent 65%);animation-delay:-9s}
+@keyframes drift{to{transform:translate(60px,40px) scale(1.12)}}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+.site-header{padding:64px 0 30px;text-align:center}
+.overline{letter-spacing:.42em;font-size:11px;color:var(--gold);text-transform:uppercase;margin-bottom:14px}
+.site-header h1{font-size:clamp(30px,5vw,52px);font-weight:800;line-height:1.15;
+  background:linear-gradient(120deg,#fff 20%,var(--gold2) 55%,var(--gold) 80%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.site-header p{color:var(--mut);max-width:640px;margin:14px auto 0;font-size:16px;line-height:1.65}
+.live-badge{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:8px 18px;border-radius:999px;
+  border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(10px);font-size:13px;color:var(--gold2);letter-spacing:.08em}
+.live-badge i{width:9px;height:9px;border-radius:50%;background:#3ddc84;box-shadow:0 0 12px #3ddc84;animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.demo-wrap{margin:26px 0 54px}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:var(--r);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 24px 60px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.08);padding:30px}
+.code-section{margin:0 0 60px}
+.code-section h2{font-size:24px;margin-bottom:6px}
+.code-section .sub{color:var(--mut);font-size:14px;margin-bottom:18px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0;align-items:center}
+.ctab{padding:10px 22px;border-radius:12px 12px 0 0;border:1px solid var(--line);border-bottom:none;cursor:pointer;
+  background:rgba(255,255,255,.03);color:var(--mut);font-size:14px;font-weight:600;letter-spacing:.04em;transition:.25s}
+.ctab.active{background:linear-gradient(180deg,rgba(212,175,55,.22),rgba(212,175,55,.06));color:var(--gold2)}
+.ctab:hover{color:var(--ink)}
+#copyBtn{margin-left:auto;padding:9px 20px;border-radius:10px;border:1px solid var(--line);cursor:pointer;
+  background:linear-gradient(120deg,var(--gold),#a8842a);color:#0a0e1a;font-weight:700;font-size:13px;transition:.25s}
+#copyBtn:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(212,175,55,.35)}
+.codebox{border:1px solid var(--line);border-radius:0 14px 14px 14px;overflow:hidden;background:#0d1326}
+.codebox pre{margin:0;max-height:560px;overflow:auto}
+.codebox pre code{display:block;padding:22px;font-family:"Cascadia Code","Fira Code",Consolas,monospace;font-size:13.5px;line-height:1.7;background:transparent}
+.codebox pre::-webkit-scrollbar{width:10px;height:10px}
+.codebox pre::-webkit-scrollbar-thumb{background:rgba(212,175,55,.35);border-radius:8px}
+footer{text-align:center;padding:34px 20px 44px;color:var(--mut);font-size:14px;border-top:1px solid rgba(212,175,55,.14)}
+footer strong{color:var(--gold2)}
+/* ============ APP CSS (per projekt) ============ */
+
+/* ===== PINBOARD APP ===== */
+.pb-note{font-size:12.5px;color:var(--mut);margin-bottom:14px}
+.pb-note b{color:var(--gold2)}
+.pb-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.pb-search{flex:1;min-width:200px;padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.3);color:var(--ink);font-size:15px;outline:none}
+.pb-search:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,.15)}
+.pb-tabs{display:flex;gap:8px}
+.pb-tab{padding:10px 18px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--mut);cursor:pointer;font-weight:600;font-size:14px;transition:.2s}
+.pb-tab.active{background:linear-gradient(120deg,var(--gold),#a8842a);color:#0a0e1a;border-color:transparent}
+.pb-tab:hover{color:var(--ink)}
+.pb-tab.active:hover{color:#0a0e1a}
+.pb-ghost{padding:10px 18px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--mut);cursor:pointer;font-weight:600;font-size:14px;transition:.2s}
+.pb-ghost:hover{color:var(--ink)}
+.pb-shuffle{padding:10px 18px;border-radius:12px;border:1px solid var(--line);background:var(--glass);color:var(--gold2);cursor:pointer;font-weight:700;font-size:14px;transition:.2s}
+.pb-shuffle:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(212,175,55,.25)}
+.pb-grid{columns:4;column-gap:16px}
+.pb-pin{break-inside:avoid;margin-bottom:16px;border-radius:14px;overflow:hidden;position:relative;cursor:pointer;border:1px solid var(--line);transition:transform .25s,box-shadow .25s;animation:pbIn .4s ease}
+@keyframes pbIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.pb-pin:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.pb-art{display:flex;align-items:center;justify-content:center;font-size:64px;min-height:180px}
+.pb-overlay{position:absolute;inset:0;background:rgba(5,8,18,.55);opacity:0;transition:.25s;display:flex;align-items:flex-start;justify-content:flex-end;padding:12px}
+.pb-pin:hover .pb-overlay{opacity:1}
+.pb-save{padding:9px 18px;border-radius:999px;border:none;cursor:pointer;font-weight:800;font-size:13px;background:linear-gradient(120deg,var(--gold),#a8842a);color:#0a0e1a;transition:.2s}
+.pb-save.saved{background:#3ddc84}
+.pb-meta{padding:12px 14px;background:rgba(0,0,0,.35)}
+.pb-meta h3{font-size:15px;margin-bottom:8px}
+.pb-tags{display:flex;gap:6px;flex-wrap:wrap}
+.pb-tag{font-size:11.5px;color:var(--gold2);background:rgba(212,175,55,.12);border:1px solid var(--line);padding:3px 10px;border-radius:999px}
+.pb-modal{position:fixed;inset:0;background:rgba(3,5,12,.82);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;backdrop-filter:blur(6px)}
+.pb-modal.open{display:flex}
+.pb-modal-card{max-width:560px;width:100%;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#0d1326;box-shadow:0 30px 80px rgba(0,0,0,.6);animation:pbIn .3s ease}
+.pb-modal-art{display:flex;align-items:center;justify-content:center;font-size:110px;min-height:260px}
+.pb-modal-body{padding:22px}
+.pb-modal-body h2{margin-bottom:12px;font-size:22px}
+.pb-modal-actions{display:flex;gap:10px;margin-top:18px}
+.pb-empty{text-align:center;color:var(--mut);padding:44px 10px;column-span:all;font-size:15px}
+@media(max-width:1000px){.pb-grid{columns:3}}
+@media(max-width:700px){.pb-grid{columns:2}}
+@media(max-width:460px){.pb-grid{columns:1}}
+
+@media(max-width:640px){.glass{padding:20px}.site-header{padding:44px 0 22px}}
+</style>
+</head>
+<body>
+<div class="bg-orbs"><span></span><span></span><span></span></div>
+
+<header class="site-header wrap">
+  <div class="overline">Erion Nezha · Web Projects</div>
+  <h1>PinBoard</h1>
+  <p>Zbulo dhe ruaj pin-e frymëzuese në një masonry grid elegant — demo lokale.</p>
+  <div class="live-badge"><i></i> LIVE DEMO</div>
+</header>
+
+<main class="wrap">
+  <section class="demo-wrap">
+    <div class="glass" id="demo">
+
+<div class="pb-note">ℹ️ <b>Demo lokale</b> — pin-et e ruajtura mbahen në shfletuesin tënd (localStorage).</div>
+<div class="pb-toolbar">
+  <input class="pb-search" id="pbSearch" type="text" placeholder="Kërko pin-e… (p.sh. natyrë, sport, kafe)">
+  <div class="pb-tabs">
+    <button class="pb-tab active" data-tab="all">📌 Të gjitha</button>
+    <button class="pb-tab" data-tab="saved">❤️ Të ruajturat</button>
+  </div>
+  <button class="pb-shuffle" id="pbShuffle">🔀 Përziej</button>
+</div>
+<div class="pb-grid" id="pbGrid"></div>
+<div class="pb-modal" id="pbModal">
+  <div class="pb-modal-card">
+    <div class="pb-modal-art" id="pbModalArt"></div>
+    <div class="pb-modal-body">
+      <h2 id="pbModalTitle"></h2>
+      <div class="pb-tags" id="pbModalTags"></div>
+      <div class="pb-modal-actions">
+        <button class="pb-save" id="pbModalSave">Ruaj</button>
+        <button class="pb-ghost" id="pbModalClose">Mbyll</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </section>
+
+  <section class="code-section">
+    <h2>💻 Kodi Burim</h2>
+    <p class="sub">I gjithë kodi i këtij projekti — i lexueshëm, i kopjueshëm, gati për t'u mësuar.</p>
+    <div class="tabs">
+      <button class="ctab active" data-tab="html">HTML</button>
+      <button class="ctab" data-tab="css">CSS</button>
+      <button class="ctab" data-tab="js">JavaScript</button>
+      <button id="copyBtn">Kopjo kodin</button>
+    </div>
+    <div class="codebox"><pre><code id="codeView" class="language-html"></code></pre></div>
+  </section>
+</main>
+
+<footer>Krijuar nga <strong>Erion Nezha</strong> · © 2026 — Të gjitha të drejtat e rezervuara</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script id="appjs">
+
+(function(){
+var PINS=[
+ {id:1,t:'Mbrëmje me yje',tags:['natyrë','qiell'],g:['#0f2027','#2c5364'],e:'🌌',h:300},
+ {id:2,t:'Kafe e mëngjesit',tags:['kafe','mëngjes'],g:['#4b2e2b','#8a5a44'],e:'☕',h:220},
+ {id:3,t:'Tirana nga lart',tags:['qytet','udhëtim'],g:['#232526','#414345'],e:'🏙️',h:260},
+ {id:4,t:'Kuzhinë moderne',tags:['kuzhinë','dekor'],g:['#3a1c71','#d76d77'],e:'🍳',h:300},
+ {id:5,t:'Fustan vere',tags:['modë','veshje'],g:['#f953c6','#b91d73'],e:'👗',h:340},
+ {id:6,t:'Malet e veriut',tags:['natyrë','aventurë'],g:['#134e5e','#71b280'],e:'⛰️',h:260},
+ {id:7,t:'Punë nga shtëpia',tags:['produktivitet','zyrë'],g:['#141e30','#243b55'],e:'💻',h:220},
+ {id:8,t:'Bregdeti jonian',tags:['det','pushime'],g:['#2193b0','#6dd5ed'],e:'🏖️',h:300},
+ {id:9,t:'Libra për shpirtin',tags:['libra','lexim'],g:['#603813','#b29f94'],e:'📚',h:240},
+ {id:10,t:'Stil minimalist',tags:['dekor','shtëpi'],g:['#606c88','#3f4c6b'],e:'🛋️',h:280},
+ {id:11,t:'Vrapim mëngjesi',tags:['sport','shëndet'],g:['#cb2d3e','#ef473a'],e:'🏃',h:220},
+ {id:12,t:'Ëmbëlsirë me çokollatë',tags:['receta','gatim'],g:['#870000','#190a05'],e:'🍰',h:260},
+ {id:13,t:'Kitarë akustike',tags:['muzikë','hobi'],g:['#7f00ff','#e100ff'],e:'🎸',h:300},
+ {id:14,t:'Lule pranvere',tags:['natyrë','kopsht'],g:['#ee9ca7','#ffdde1'],e:'🌸',h:200},
+ {id:15,t:'Studio fotografike',tags:['foto','art'],g:['#000428','#004e92'],e:'📷',h:280},
+ {id:16,t:'Mace e lezetshme',tags:['kafshë','mace'],g:['#f7971e','#ffd200'],e:'🐱',h:240},
+ {id:17,t:'Yoga në perëndim',tags:['shëndet','yoga'],g:['#43cea2','#185a9d'],e:'🧘',h:320},
+ {id:18,t:'Qyteti i vjetër',tags:['udhëtim','histori'],g:['#8e2de2','#4a00e0'],e:'🏛️',h:260}
+];
+var saved=[];
+try{saved=JSON.parse(localStorage.getItem('pb_saved')||'[]');}catch(e){saved=[];}
+var tab='all',query='';
+var order=PINS.map(function(p){return p.id;});
+function isSaved(id){return saved.indexOf(id)>-1;}
+function persist(){try{localStorage.setItem('pb_saved',JSON.stringify(saved));}catch(e){}}
+function getPin(id){for(var i=0;i<PINS.length;i++)if(PINS[i].id===id)return PINS[i];return null;}
+function toggleSave(id){var i=saved.indexOf(id);if(i>-1){saved.splice(i,1);}else{saved.push(id);}persist();render();if(modalId===id)syncModalSave();}
+function matches(p){
+ if(tab==='saved'&&!isSaved(p.id))return false;
+ if(!query)return true;
+ return (p.t+' '+p.tags.join(' ')).toLowerCase().indexOf(query)>-1;
+}
+function tagsHtml(p){return p.tags.map(function(t){return '<span class="pb-tag">'+t+'</span>';}).join('');}
+function render(){
+ var g=document.getElementById('pbGrid'),html='';
+ for(var k=0;k<order.length;k++){
+  var p=getPin(order[k]);if(!matches(p))continue;
+  var sv=isSaved(p.id);
+  html+='<div class="pb-pin" data-id="'+p.id+'">'
+   +'<div class="pb-art" style="background:linear-gradient(135deg,'+p.g[0]+','+p.g[1]+');min-height:'+p.h+'px">'+p.e+'</div>'
+   +'<div class="pb-overlay"><button class="pb-save'+(sv?' saved':'')+'" data-save="'+p.id+'">'+(sv?'✓ Ruajtur':'Ruaj')+'</button></div>'
+   +'<div class="pb-meta"><h3>'+p.t+'</h3><div class="pb-tags">'+tagsHtml(p)+'</div></div></div>';
+ }
+ if(!html)html='<div class="pb-empty">😕 S\'u gjet asnjë pin.<br>Provo një kërkim tjetër ose kthehu te "Të gjitha".</div>';
+ g.innerHTML=html;
+}
+document.getElementById('pbGrid').addEventListener('click',function(ev){
+ var s=ev.target.getAttribute('data-save');
+ if(s){ev.stopPropagation();toggleSave(parseInt(s,10));return;}
+ var card=ev.target.closest('.pb-pin');
+ if(card)openModal(parseInt(card.getAttribute('data-id'),10));
+});
+document.getElementById('pbSearch').addEventListener('input',function(ev){query=ev.target.value.trim().toLowerCase();render();});
+var tabs=document.querySelectorAll('.pb-tab[data-tab]');
+for(var i=0;i<tabs.length;i++){
+ tabs[i].addEventListener('click',function(){
+  tab=this.getAttribute('data-tab');
+  for(var j=0;j<tabs.length;j++)tabs[j].classList.toggle('active',tabs[j]===this);
+  render();
+ });
+}
+document.getElementById('pbShuffle').addEventListener('click',function(){
+ for(var i=order.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=order[i];order[i]=order[j];order[j]=t;}
+ render();
+});
+var modal=document.getElementById('pbModal'),modalId=null;
+function openModal(id){
+ var p=getPin(id);if(!p)return;modalId=id;
+ var art=document.getElementById('pbModalArt');
+ art.textContent=p.e;
+ art.style.background='linear-gradient(135deg,'+p.g[0]+','+p.g[1]+')';
+ document.getElementById('pbModalTitle').textContent=p.t;
+ document.getElementById('pbModalTags').innerHTML=tagsHtml(p);
+ syncModalSave();modal.classList.add('open');
+}
+function syncModalSave(){
+ var b=document.getElementById('pbModalSave'),sv=isSaved(modalId);
+ b.textContent=sv?'✓ Ruajtur':'Ruaj';b.classList.toggle('saved',sv);
+}
+document.getElementById('pbModalSave').addEventListener('click',function(){toggleSave(modalId);});
+document.getElementById('pbModalClose').addEventListener('click',function(){modal.classList.remove('open');});
+modal.addEventListener('click',function(ev){if(ev.target===modal)modal.classList.remove('open');});
+document.addEventListener('keydown',function(ev){if(ev.key==='Escape')modal.classList.remove('open');});
+render();
+})();
+
+</script>
+<script>
+(function(){
+  var tabs={
+    html:{lang:"html",get:function(){return document.getElementById("demo").innerHTML.trim();}},
+    css:{lang:"css",get:function(){return document.getElementById("appcss").textContent.trim();}},
+    js:{lang:"javascript",get:function(){return document.getElementById("appjs").textContent.trim();}}
+  };
+  var view=document.getElementById("codeView"),cur="html";
+  function render(){
+    view.textContent=tabs[cur].get();
+    view.className="language-"+tabs[cur].lang;
+    if(window.hljs){delete view.dataset.highlighted;hljs.highlightElement(view);}
+    var bs=document.querySelectorAll(".ctab");
+    for(var i=0;i<bs.length;i++)bs[i].classList.toggle("active",bs[i].dataset.tab===cur);
+  }
+  var bs=document.querySelectorAll(".ctab");
+  for(var i=0;i<bs.length;i++)bs[i].addEventListener("click",function(){cur=this.dataset.tab;render();});
+  document.getElementById("copyBtn").addEventListener("click",function(){
+    var b=this,code=tabs[cur].get();
+    function done(t){b.textContent=t;setTimeout(function(){b.textContent="Kopjo kodin";},1600);}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(code).then(function(){done("U kopjua ✓");},function(){done("Dështoi");});}
+    else{var ta=document.createElement("textarea");ta.value=code;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done("U kopjua ✓");}catch(e){done("Dështoi");}document.body.removeChild(ta);}
+  });
+  render();
+})();
+</script>
+</body>
+</html>
